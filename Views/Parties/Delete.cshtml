@@ -1,0 +1,22 @@
+@model PartyManager.Models.Party
+
+@{
+    ViewData["Title"] = "Delete Party";
+}
+
+<h1>Delete Party</h1>
+
+<h3>Are you sure you want to delete this party?</h3>
+
+<div>
+    <h4>@Model.Description</h4>
+    <p>Date: @Model.EventDate.ToShortDateString()</p>
+    <p>Location: @Model.Location</p>
+</div>
+
+<form asp-action="Delete">
+    <input type="hidden" asp-for="PartyId" />
+    <button type="submit" class="btn btn-danger">Delete</button>
+</form>
+
+<a href="/Parties" class="btn btn-secondary mt-3">Cancel</a>

@@ -1,0 +1,37 @@
+@model PartyManager.Models.Invitation
+
+@{
+    ViewData["Title"] = "Edit Invitation";
+}
+
+<h2>Edit Invitation</h2>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="InvitationId" />
+    <input type="hidden" asp-for="PartyId" />
+
+    <div class="form-group">
+        <label>Guest Name</label>
+        <input asp-for="GuestName" class="form-control" />
+        <span asp-validation-for="GuestName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mt-2">
+        <label>Guest Email</label>
+        <input asp-for="GuestEmail" type="email" class="form-control" />
+        <span asp-validation-for="GuestEmail" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mt-2">
+        <label>Response</label>
+        <select asp-for="Response" class="form-control">
+            <option value="Pending">Pending</option>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3">Save Changes</button>
+</form>
+
+<a href="/Parties/Details/@Model.PartyId" class="btn btn-secondary mt-3">Back</a>

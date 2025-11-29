@@ -1,0 +1,45 @@
+@model IEnumerable<PartyManager.Models.Party>
+
+@{
+    ViewData["Title"] = "Parties";
+}
+
+<h1>Parties</h1>
+
+<p>
+    <a class="btn btn-primary" href="/Parties/Create">Create New Party</a>
+</p>
+
+<table class="table table-bordered">
+    <thead class="table-light">
+    <tr>
+        <th>Description</th>
+        <th>Event Date</th>
+        <th>Location</th>
+        <th style="width: 300px;"></th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr class="@(item.IsDeleted ? "table-danger" : "")">
+            <td>@item.Description</td>
+            <td>@item.EventDate.ToShortDateString()</td>
+            <td>@item.Location</td>
+
+            <td>
+                @if (!item.IsDeleted)
+                {
+                    <a class="btn btn-info btn-sm" href="/Parties/Details/@item.PartyId">Details</a>
+                    <a class="btn btn-warning btn-sm" href="/Parties/Edit/@item.PartyId">Edit</a>
+                    <a class="btn btn-danger btn-sm" href="/Parties/Delete/@item.PartyId">Delete</a>
+                }
+                else
+                {
+                    <a class="btn btn-success btn-sm" href="/Parties/Undo/@item.PartyId">Undo Delete</a>
+                }
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

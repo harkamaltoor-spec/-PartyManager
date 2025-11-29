@@ -1,0 +1,70 @@
+@model PartyManager.Models.Party
+
+@{
+    ViewData["Title"] = "Party Details";
+}
+
+<h1>Party Details</h1>
+
+<div>
+    <h3>@Model.Description</h3>
+    <p><strong>Date:</strong> @Model.EventDate.ToShortDateString()</p>
+    <p><strong>Location:</strong> @Model.Location</p>
+</div>
+
+<a class="btn btn-warning" href="/Parties/Edit/@Model.PartyId">Edit</a>
+<a class="btn btn-danger" href="/Parties/Delete/@Model.PartyId">Delete</a>
+<a class="btn btn-secondary" href="/Parties">Back to List</a>
+
+<h3 class="mt-4">Invitations</h3>
+
+<a class="btn btn-primary btn-sm"
+   asp-controller="Invitations"
+   asp-action="Create"
+   asp-route-partyId="@Model.PartyId">
+    Add Invitation
+</a>
+
+
+<table class="table mt-3">
+    <thead>
+    <tr>
+        <th>Guest Name</th>
+        <th>Email</th>
+        <th>Response</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+
+    @if (Model.Invitations != null && Model.Invitations.Count > 0)
+    {
+        foreach (var invite in Model.Invitations)
+        {
+            <tr>
+                <td>@invite.GuestName</td>
+                <td>@invite.GuestEmail</td>
+                <td>@invite.Response</td>
+                <td>
+                    <a class="btn btn-warning btn-sm"
+                       asp-controller="Invitations"
+                       asp-action="Edit"
+                       asp-route-id="@invite.InvitationId">Edit</a>
+
+                    <a class="btn btn-danger btn-sm"
+                       asp-controller="Invitations"
+                       asp-action="Delete"
+                       asp-route-id="@invite.InvitationId">Delete</a>
+                </td>
+            </tr>
+        }
+    }
+    else
+    {
+        <tr>
+            <td colspan="4" class="text-center text-muted">No invitations yet.</td>
+        </tr>
+    }
+
+    </tbody>
+</table>

@@ -1,0 +1,22 @@
+@model PartyManager.Models.Invitation
+
+@{
+    ViewData["Title"] = "Delete Invitation";
+}
+
+<h2>Delete Invitation</h2>
+
+<h4>Are you sure you want to delete this invitation?</h4>
+
+<div>
+    <p><strong>Guest Name:</strong> @Model.GuestName</p>
+    <p><strong>Email:</strong> @Model.GuestEmail</p>
+    <p><strong>Response:</strong> @Model.Response</p>
+</div>
+
+<form asp-action="Delete">
+    <input type="hidden" asp-for="InvitationId" />
+    <button type="submit" class="btn btn-danger">Delete</button>
+</form>
+
+<a href="/Parties/Details/@Model.PartyId" class="btn btn-secondary mt-3">Cancel</a>

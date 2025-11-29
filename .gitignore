@@ -1,0 +1,31 @@
+# Build folders
+bin/
+obj/
+
+# SQLite database files
+*.db
+*.db-shm
+*.db-wal
+
+# IDE settings
+.vscode/
+.idea/
+
+# User-specific files
+*.user
+*.suo
+*.swp
+
+# Sensitive config files (never upload to GitHub)
+appsettings.json
+appsettings.Development.json
+
+# OS-generated files
+.DS_Store
+
+# Logs
+*.log
+
+# Backup files
+*.bak
+*.tmp
