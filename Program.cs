@@ -4,9 +4,9 @@ using PartyManager.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add database
+// Add services to the container.
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlite("Data Source=app.db"));
 
 // Add Identity
 builder.Services.AddDefaultIdentity<IdentityUser>(options =>
@@ -21,60 +21,41 @@ builder.Services.AddRazorPages();
 
 var app = builder.Build();
 
+// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
+    app.UseHsts();
 }
 
+app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Default route
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
 
-
-// ⭐⭐⭐ SEED ADMIN USER AND ROLE ⭐⭐⭐
+// ✅ SIMPLE DATABASE SETUP (NO ADMIN CREATION - WE'LL DO THAT MANUALLY)
 using (var scope = app.Services.CreateScope())
 {
-    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+    var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-    // Create Admin Role if it doesn’t exist
-    string adminRole = "Admin";
-    if (!await roleManager.RoleExistsAsync(adminRole))
+    try
     {
-        await roleManager.CreateAsync(new IdentityRole(adminRole));
+        // Create database if it doesn't exist
+        context.Database.EnsureCreated();
+        Console.WriteLine("✅ Database created successfully");
     }
-
-    // Create Admin User if it doesn’t exist
-    string adminEmail = "admin@party.com";
-    string adminPassword = "Admin123!";
-
-    var existingUser = await userManager.FindByEmailAsync(adminEmail);
-
-    if (existingUser == null)
+    catch (Exception ex)
     {
-        var adminUser = new IdentityUser
-        {
-            UserName = adminEmail,
-            Email = adminEmail,
-            EmailConfirmed = true
-        };
-
-        var result = await userManager.CreateAsync(adminUser, adminPassword);
-
-        if (result.Succeeded)
-        {
-            await userManager.AddToRoleAsync(adminUser, adminRole);
-        }
+        Console.WriteLine($"⚠️ Database warning: {ex.Message}");
+        // Continue anyway - app will still run
     }
 }
-// ⭐⭐⭐ END SEEDING ⭐⭐⭐
 
 app.Run();
