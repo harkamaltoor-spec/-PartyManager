@@ -20,7 +20,7 @@ namespace PartyManager.Controllers
         public async Task<IActionResult> Index()
         {
             var parties = await _context.Parties
-                .Where(p => !p.IsDeleted)
+                //   .Where(p => !p.IsDeleted) Changed
                 .ToListAsync();
 
             return View(parties);
@@ -35,7 +35,9 @@ namespace PartyManager.Controllers
             // ⭐ FIXED: Include Invitations to avoid null reference
             var party = await _context.Parties
                 .Include(p => p.Invitations)
-                .FirstOrDefaultAsync(p => p.PartyId == id && !p.IsDeleted);
+               // .FirstOrDefaultAsync(p => p.PartyId == id && !p.IsDeleted); Chnanged
+
+                .FirstOrDefaultAsync(p => p.PartyId == id);
 
             if (party == null) return NotFound();
 
